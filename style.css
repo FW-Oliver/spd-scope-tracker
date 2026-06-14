@@ -1,0 +1,86 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.cabinet {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.scope-card{
+    border:2px solid black;
+    border-radius:15px;
+    padding:15px;
+}
+
+button{
+    width:100%;
+    margin-top:5px;
+    padding:6px;
+    border-radius:6px;
+}
+
+button{
+    width:100%;
+    margin-top:5px;
+    padding:6px;
+    border-radius:6px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.start-btn{
+    background-color:#90EE90;
+}
+
+.off-btn{
+    background-color:#E0E0E0;
+}
+
+.edit-btn{
+    background-color:#ADD8E6;
+}
+
+.good{
+    background-color:#d4edda;
+}
+
+.warning{
+    background-color:#fff3cd;
+}
+
+.today{
+    background-color:#ffd8a8;
+}
+
+.overdue{
+    background-color:#f8d7da;
+}
+
+.off{
+    background-color:#eeeeee;
+}
+
+.no-expiry{
+    background-color:#cce5ff;
+}
+
+.status{
+    font-weight:bold;
+    font-size:22px;
+}
+
+@keyframes pulse{
+    0% {opacity:1;}
+    50% {opacity:.6;}
+    100% {opacity:1;}
+}
+
+.overdue{
+    background-color:red;
+    color:white;
+    animation:pulse 1.5s infinite;
+}
