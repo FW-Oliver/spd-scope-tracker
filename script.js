@@ -1,5 +1,27 @@
 console.log("Script loaded!");
 
+const scriptURL = "https://script.google.com/macros/s/AKfycbyx5zodizevD4IJf5oMUIz1yBuzk9x2N6FXzr61U8INwNdxPDT6uIpMclT8gOU34zt2/exec";
+
+let scopes = [];
+
+fetch(scriptURL)
+  .then(response => response.json())
+  .then(data => {
+
+    console.log(data);
+
+    scopes = data.map(scope => ({
+
+      cabinet: scope["Cabinet"],
+      position: scope["Position"],
+      startDate: scope["Start Date"],
+      permanent: scope["Permanent"]
+    }));
+
+    renderScopes();
+
+  });
+/*
 const scopes = [
   { cabinet: 1, position: 1, permanent: true },
   { cabinet: 1, position: 2, permanent: true },
@@ -28,6 +50,7 @@ const scopes = [
   { cabinet: 3, position: 23, startDate: "2026-05-01" },
   { cabinet: 3, position: 24, startDate: "2026-06-12" }
 ];
+*/
 
 function getStatus(scope) {
 
@@ -90,9 +113,44 @@ function renderScopes() {
   document.getElementById("cabinet2").innerHTML = "";
   document.getElementById("cabinet3").innerHTML = "";
 
+let overdueCount = 0;
+let todayCount = 0;
+let warningCount = 0;
+let goodCount = 0;
+let offCount = 0;
+let noExpiryCount = 0;
+
 scopes.forEach((scope, index) => {
 
     const result = getStatus(scope);
+
+    switch (result.status) {
+
+      case "OVERDUE":
+        overdueCount++;
+        break;
+
+      case "TODAY":
+        todayCount++;
+        break;
+
+      case "WARNING":
+        warningCount++;
+        break;
+
+      case "GOOD":
+        goodCount++;
+        break;
+
+      case "OFF":
+        offCount++;
+        break;
+
+      case "NO EXPIRY":
+        noExpiryCount++;
+        break;
+
+    }
 
     const card = document.createElement("div");
 
@@ -130,14 +188,26 @@ scopes.forEach((scope, index) => {
       .getElementById(`cabinet${scope.cabinet}`)
       .appendChild(card);
     // START button
-card.querySelector(".start-btn").onclick = () => {
+    
+          card.querySelector(".start-btn").onclick = () => {
 
-  scopes[index].startDate =
-    new Date().toISOString().split("T")[0];
+            fetch(scriptURL, {
 
-  renderScopes();
+              method: "POST",
 
-};
+              body: JSON.stringify({
+
+                action: "START",
+
+                position: scope.position
+
+              })
+
+            })
+
+            .then(() => location.reload());
+
+          };
 
 
 // OFF button
@@ -181,6 +251,25 @@ card.querySelector(".edit-btn").onclick = () => {
 
   });
 
+    document.getElementById("overdue-count").textContent =
+      overdueCount;
+
+    document.getElementById("today-count").textContent =
+      todayCount;
+
+    document.getElementById("warning-count").textContent =
+      warningCount;
+
+    document.getElementById("good-count").textContent =
+      goodCount;
+
+    document.getElementById("off-count").textContent =
+      offCount;
+
+    document.getElementById("no-expiry-count").textContent =
+      noExpiryCount;
+
 }
 
-renderScopes();
+// renderScopes();
+
